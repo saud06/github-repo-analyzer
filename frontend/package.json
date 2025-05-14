@@ -1,0 +1,31 @@
+{
+  "name": "github-repo-analyzer-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview --port 5173"
+  },
+  "dependencies": {
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "react-markdown": "^10.1.0",
+    "recharts": "2.13.0",
+    "rehype-raw": "^7.0.0",
+    "remark-gfm": "^4.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "22.5.4",
+    "@types/react": "18.3.5",
+    "@types/react-dom": "18.3.0",
+    "@vitejs/plugin-react": "4.3.1",
+    "autoprefixer": "10.4.20",
+    "daisyui": "4.12.14",
+    "postcss": "8.4.47",
+    "tailwindcss": "3.4.10",
+    "typescript": "5.5.4",
+    "vite": "5.4.2"
+  }
+}

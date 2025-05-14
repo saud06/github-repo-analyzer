@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light dark;
+}
+
+html, body, #root { height: 100%; }
+
+/* Force tooltip text to stay on one line */
+.tooltip:before {
+  white-space: nowrap;
+  max-width: none;
+}
