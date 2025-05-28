@@ -12,8 +12,8 @@ services:
       - key: FRONTEND_ORIGIN
         sync: false
 
-staticSites:
-  - name: github-repo-analyzer-frontend
+  - type: static_site
+    name: github-repo-analyzer-frontend
     buildCommand: npm ci && npm run build
     publishPath: dist
     # Set the root directory for build commands and publish path
