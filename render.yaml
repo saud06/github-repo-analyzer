@@ -12,12 +12,16 @@ services:
       - key: FRONTEND_ORIGIN
         sync: false
 
-  - type: static_site
+  - type: web
     name: github-repo-analyzer-frontend
+    env: static
     buildCommand: npm ci && npm run build
-    publishPath: dist
+    staticPublishPath: frontend/dist
     # Set the root directory for build commands and publish path
     rootDir: frontend
+    buildFilter:
+      paths:
+        - frontend/**
     headers:
       - path: /*
         name: Cache-Control
