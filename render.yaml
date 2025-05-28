@@ -16,7 +16,7 @@ services:
     name: github-repo-analyzer-frontend
     env: static
     buildCommand: npm ci && npm run build
-    staticPublishPath: frontend/dist
+    staticPublishPath: dist
     # Set the root directory for build commands and publish path
     rootDir: frontend
     buildFilter:
