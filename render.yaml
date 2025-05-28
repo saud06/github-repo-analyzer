@@ -11,21 +11,18 @@ services:
         sync: false
       - key: FRONTEND_ORIGIN
         sync: false
-  - type: static
-    name: github-repo-analyzer-frontend
-    env: static
+
+staticSites:
+  - name: github-repo-analyzer-frontend
     buildCommand: npm ci && npm run build
-    staticPublishPath: frontend/dist
-    buildFilter:
-      paths:
-        - frontend/**
+    publishPath: dist
+    # Set the root directory for build commands and publish path
+    rootDir: frontend
     headers:
       - path: /*
         name: Cache-Control
         value: no-cache
-    # Set the root directory for build commands and publish path
-    rootDir: frontend
     envVars:
-      # Point frontend to backend public URL on Render. You can override in Dashboard if you rename services.
+      # Point frontend to backend public URL on Render. Override in Dashboard with your real backend URL.
       - key: VITE_API_BASE
         value: https://github-repo-analyzer-backend.onrender.com
