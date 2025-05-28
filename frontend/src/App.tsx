@@ -1,7 +1,8 @@
-import { useEffect, useMemo, useRef, useState, type ChangeEvent } from 'react'
+import { useEffect, useMemo, useRef, useState, lazy, Suspense, type ChangeEvent } from 'react'
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, BarChart, Bar, XAxis, YAxis, RadarChart, Radar, PolarGrid, PolarAngleAxis, PolarRadiusAxis } from 'recharts'
-import ReadmeVisuals from './components/ReadmeVisuals'
-import ArchGraphView from './components/ArchGraphView'
+// Lazy-loaded heavy components
+const ReadmeVisuals = lazy(() => import('./components/ReadmeVisuals'))
+const ArchGraphView = lazy(() => import('./components/ArchGraphView'))
 
 type Metadata = {
   full_name: string
@@ -719,6 +720,11 @@ function App() {
     setLoading(true)
     setError('')
     setHasAnalyzed(true)
+    // Preload heavy lazy-loaded components so they are ready by the time data arrives
+    try {
+      import('./components/ReadmeVisuals')
+      import('./components/ArchGraphView')
+    } catch {}
     setMeta(null)
     setLangs({})
     setReadmeTree(null)
@@ -1193,7 +1199,7 @@ function App() {
 
         <div ref={reportRef} className="space-y-6">
         {hasAnalyzed && (
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="mt-6 md:mt-6 grid md:grid-cols-2 gap-x-6 gap-y-6 md:gap-y-10 lg:gap-y-12">
             {/* Metadata */}
             {reportOpts.metadata && (
               <div className="card bg-base-100 border border-base-300 shadow-sm">
@@ -1518,7 +1524,9 @@ function App() {
                   <div className="mb-3 text-sm opacity-80">
                     Nodes: {arch.stats?.node_count ?? 0} · Edges: {arch.stats?.edge_count ?? 0} · Internal: {arch.stats?.internal_nodes ?? 0} · External: {arch.stats?.external_nodes ?? 0}
                   </div>
-                  <ArchGraphView data={{ nodes: arch.nodes, edges: arch.edges }} langFilter={archLang} onLangChange={refetchArchWithLang} />
+                  <Suspense fallback={<div className="h-64 skeleton rounded-md" />}>
+                    <ArchGraphView data={{ nodes: arch.nodes, edges: arch.edges }} langFilter={archLang} onLangChange={refetchArchWithLang} />
+                  </Suspense>
                 </>
               ) : (
                 <div className="text-sm opacity-70">
@@ -1753,7 +1761,9 @@ function App() {
               )}
               {readmeTree && (
                 <div className="mt-2">
-                  <ReadmeVisuals root={readmeTree} visibleCount={readmeCount} />
+                  <Suspense fallback={<div className="h-40 skeleton rounded-md" />}>
+                    <ReadmeVisuals root={readmeTree} visibleCount={readmeCount} />
+                  </Suspense>
                   {countReadmeSections(readmeTree) > readmeCount && (
                     <div className="mt-2">
                       <button className="btn btn-sm" onClick={() => setReadmeCount(c => c + 5)}>See more</button>

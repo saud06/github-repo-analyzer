@@ -24,8 +24,14 @@ load_dotenv()
 app = FastAPI(title="GitHub Repo Analyzer API", version="0.1.0")
 
 # CORS for local dev and Render frontend
-# Use wildcard origins and disable credentials to avoid invalid configuration.
-allow_origins = ["*"]
+# Configure via FRONTEND_ORIGIN; supports comma-separated list.
+# Fallback to wildcard in development.
+origins_env = os.getenv("FRONTEND_ORIGIN", "").strip()
+if origins_env:
+    allow_origins = [o.strip() for o in origins_env.split(",") if o.strip()]
+else:
+    allow_origins = ["*"]
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=allow_origins,
@@ -44,7 +50,9 @@ def _check_tool(args: List[str]) -> dict:
 
 @app.get("/api/debug/env-tools")
 def debug_env_tools():
-    """Quick environment check for optional analyzers."""
+    """Quick environment check for optional analyzers (disabled by default)."""
+    if os.getenv("ENABLE_DEBUG", "0") != "1":
+        raise HTTPException(status_code=404, detail="Not found")
     return {
         "git": _check_tool(["git", "--version"]),
         "node": _check_tool(["node", "-v"]),
@@ -125,6 +133,8 @@ def root():
 
 @app.get("/api/debug/github-rate-limit")
 def github_rate_limit():
+    if os.getenv("ENABLE_DEBUG", "0") != "1":
+        raise HTTPException(status_code=404, detail="Not found")
     headers = {"Accept": "application/vnd.github+json"}
     token = os.getenv("GITHUB_TOKEN")
     if token:

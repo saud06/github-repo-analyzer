@@ -25,3 +25,7 @@ services:
         value: no-cache
     # Set the root directory for build commands and publish path
     rootDir: frontend
+    envVars:
+      # Point frontend to backend public URL on Render. You can override in Dashboard if you rename services.
+      - key: VITE_API_BASE
+        value: https://github-repo-analyzer-backend.onrender.com

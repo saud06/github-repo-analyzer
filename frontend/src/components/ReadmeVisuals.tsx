@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 import ReactMarkdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
 import rehypeRaw from 'rehype-raw'
-import type { ReadmeNode } from './ReadmeMindMap'
+import type { ReadmeNode } from '../types/readme'
 
 /*
   ReadmeVisuals
